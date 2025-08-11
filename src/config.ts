@@ -35,8 +35,8 @@ export const defaultConfig: WorkflowConfig = {
   },
   defaultClient: 'Salt Lake',
   mcpPort: 3333,
-  openaiModel: 'gpt-4o',
-  openaiModelMini: 'gpt-4o-mini',
+  openaiModel: 'gpt-4o',           // GPT-4 for Orchestrator (high-level planning)
+  openaiModelMini: 'gpt-4o-mini', // GPT-4 Mini for Workers (task execution)
   dryRun: false
 };
 
@@ -59,6 +59,8 @@ export function getConfig(): WorkflowConfig {
   if (process.env.OPENAI_MODEL_MINI) {
     config.openaiModelMini = process.env.OPENAI_MODEL_MINI;
   }
+  
+
   
   return config;
 }
