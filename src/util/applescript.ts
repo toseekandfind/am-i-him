@@ -36,7 +36,9 @@ export async function runAppleScript(script: string): Promise<AppleScriptResult>
 }
 
 export function escapeAppleScriptString(str: string): string {
-  return str.replace(/'/g, "\\'").replace(/"/g, '\\"');
+  // AppleScript uses double quotes, so we need to escape them properly
+  // and handle single quotes carefully
+  return str.replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\r/g, '\\r');
 }
 
 export function createOmniFocusScript(projectName: string, title: string, note: string, tags: string[], dueDate?: string): string {
@@ -48,23 +50,23 @@ export function createOmniFocusScript(projectName: string, title: string, note: 
   let script = `
     tell application "OmniFocus"
       tell default document
-        set targetProject to first project whose name is "${escapedProject}"
+        set targetProject to first project whose name is '${escapedProject}'
         if targetProject is missing value then
           return "{\\"error\\": \\"Project '${escapedProject}' not found\\"}"
         end if
         
-        set newTask to make new task with properties {name:"${escapedTitle}", note:"${escapedNote}"} at end of tasks of targetProject
+        set newTask to make new task with properties {name:'${escapedTitle}', note:'${escapedNote}'} at end of tasks of targetProject
   `;
   
   if (dueDate) {
     script += `
-        set due date of newTask to date "${dueDate}"
+        set due date of newTask to date '${dueDate}'
     `;
   }
   
   if (escapedTags.length > 0) {
     script += `
-        repeat with tagName in {${escapedTags.map(tag => `"${tag}"`).join(', ')}}
+        repeat with tagName in {${escapedTags.map(tag => `'${tag}'`).join(', ')}}
           set targetTag to first tag whose name is tagName
           if targetTag is not missing value then
             add targetTag to tags of newTask
@@ -94,7 +96,7 @@ export function findTasksScript(query: string): string {
         repeat with proj in allProjects
           set projectTasks to tasks of proj
           repeat with tsk in projectTasks
-            if name of tsk contains "${escapedQuery}" or note of tsk contains "${escapedQuery}" then
+            if name of tsk contains '${escapedQuery}' or note of tsk contains '${escapedQuery}' then
               set taskInfo to "{\\"id\\": \\"" & id of tsk & "\\", \\"project\\": \\"" & name of proj & "\\", \\"name\\": \\"" & name of tsk & "\\", \\"note\\": \\"" & note of tsk & "\\"}"
               set end of foundTasks to taskInfo
             end if
@@ -114,16 +116,16 @@ export function appendNoteScript(taskId: string, text: string): string {
   return `
     tell application "OmniFocus"
       tell default document
-        set targetTask to first task whose id is "${taskId}"
+        set targetTask to first task whose id is '${taskId}'
         if targetTask is missing value then
           return "{\\"error\\": \\"Task not found\\"}"
         end if
         
         set currentNote to note of targetTask
         if currentNote is "" then
-          set note of targetTask to "[${timestamp}] ${escapedText}"
+          set note of targetTask to '[${timestamp}] ${escapedText}'
         else
-          set note of targetTask to currentNote & "\\n\\n[${timestamp}] ${escapedText}"
+          set note of targetTask to currentNote & '\\n\\n[${timestamp}] ${escapedText}'
         end if
         
         return "{\\"ok\\": true}"
