@@ -7,6 +7,11 @@
   "scripts": {
     "start": "tsx src/index.ts",
     "test:workflow": "tsx src/test-workflow.ts",
+    "test:multi-agent": "tsx src/multi-agent-runner.ts",
+    "test:agent": "tsx src/test-simple-agent.ts",
+    "test:new-task": "tsx src/test-new-task.ts",
+    "agent": "tsx src/cli/agent-cli.ts",
+    "simple-agent": "tsx src/cli/simple-agent-cli.ts",
     "dev:mcp": "tsx src/mcp/server.ts",
     "sync": "tsx src/cli/of-sync.ts",
     "sync:jira": "tsx src/cli/jira-sync.ts",
@@ -16,19 +21,25 @@
     "test": "tsx --test src/**/*.test.ts"
   },
   "dependencies": {
-    "openai": "^4.57.0",
-    "express": "^4.19.2",
     "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "fast-xml-parser": "^4.4.1",
     "node-fetch": "^3.3.2",
-    "fast-xml-parser": "^4.4.1"
+    "openai": "^4.57.0"
   },
   "devDependencies": {
-    "tsx": "^4.15.7",
-    "typescript": "^5.5.4",
     "@types/express": "^4.17.21",
-    "@types/node": "^20.0.0"
+    "@types/node": "^20.0.0",
+    "tsx": "^4.15.7",
+    "typescript": "^5.5.4"
   },
-  "keywords": ["omnifocus", "jira", "mcp", "gpt-5", "workflow"],
+  "keywords": [
+    "omnifocus",
+    "jira",
+    "mcp",
+    "gpt-5",
+    "workflow"
+  ],
   "author": "",
   "license": "MIT"
-} 
+}
