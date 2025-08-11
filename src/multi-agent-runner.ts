@@ -200,13 +200,13 @@ class MultiAgentRunner {
     logger.info(`   Total Tasks: ${this.stats.orchestrator.totalTasks}`);
     logger.info(`   Errors: ${this.stats.orchestrator.errors}`);
     
-    logger.info(`\n👷 Workers (${this.workers.length}):`);
-    logger.info(`   Total Processed: ${this.stats.workers.totalProcessed}`);
-    logger.info(`   Successful: ${this.stats.workers.successful}`);
-    logger.info(`   Failed: ${this.stats.workers.failed}`);
+    logger.info(`\n🤖 Agents (${this.agents.length}):`);
+    logger.info(`   Total Processed: ${this.stats.agents.totalProcessed}`);
+    logger.info(`   Successful: ${this.stats.agents.successful}`);
+    logger.info(`   Failed: ${this.stats.agents.failed}`);
     
-    if (this.stats.workers.errors.length > 0) {
-      logger.info(`   Recent Errors: ${this.stats.workers.errors.slice(-3).join(', ')}`);
+    if (this.stats.agents.errors.length > 0) {
+      logger.info(`   Recent Errors: ${this.stats.agents.errors.slice(-3).join(', ')}`);
     }
     
     logger.info('=' .repeat(50));
@@ -215,9 +215,9 @@ class MultiAgentRunner {
 
 // Test the multi-agent system
 async function testMultiAgentSystem(): Promise<void> {
-  logger.info('🧪 Testing Multi-Agent System (3 Workers + 1 Orchestrator)');
+  logger.info('🧪 Testing Multi-Agent System (3 Safe Agents + 1 Orchestrator)');
   
-  const runner = new MultiAgentRunner(3, 2); // 3 workers, max 2 concurrent tasks per worker
+  const runner = new MultiAgentRunner(3, 2); // 3 agents, max 2 concurrent tasks per agent
   
   // Sample data
   const sampleJiraTickets: JiraTicket[] = [
